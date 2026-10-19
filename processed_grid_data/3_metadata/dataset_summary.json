@@ -1,0 +1,99 @@
+{
+    "dataset_name": "Smart Meters in London - Enhanced Aggregated Grid Load",
+    "total_cleaned_samples": 39391,
+    "splits": {
+        "train": {
+            "rows": 27573,
+            "date_range": [
+                "2011-11-30 09:00:00",
+                "2013-06-26 19:00:00"
+            ]
+        },
+        "validation": {
+            "rows": 5909,
+            "date_range": [
+                "2013-06-26 19:30:00",
+                "2013-10-27 21:30:00"
+            ]
+        },
+        "test": {
+            "rows": 5909,
+            "date_range": [
+                "2013-10-27 22:00:00",
+                "2014-02-28 00:00:00"
+            ]
+        }
+    },
+    "target_features": [
+        "grid_load_kWh",
+        "energy_per_household_kWh"
+    ],
+    "input_features": [
+        "n_households",
+        "temperature",
+        "apparentTemperature",
+        "humidity",
+        "pressure",
+        "hour",
+        "dayofweek",
+        "is_weekend",
+        "is_holiday",
+        "month",
+        "sin_hour",
+        "cos_hour",
+        "sin_month",
+        "cos_month",
+        "lag_1",
+        "lag_2",
+        "lag_48",
+        "lag_336",
+        "rolling_mean_48"
+    ],
+    "all_features": [
+        "grid_load_kWh",
+        "energy_per_household_kWh",
+        "n_households",
+        "temperature",
+        "apparentTemperature",
+        "humidity",
+        "pressure",
+        "hour",
+        "dayofweek",
+        "is_weekend",
+        "is_holiday",
+        "month",
+        "sin_hour",
+        "cos_hour",
+        "sin_month",
+        "cos_month",
+        "lag_1",
+        "lag_2",
+        "lag_48",
+        "lag_336",
+        "rolling_mean_48"
+    ],
+    "null_counts": {
+        "grid_load_kWh": 0,
+        "energy_per_household_kWh": 0,
+        "n_households": 0,
+        "temperature": 0,
+        "apparentTemperature": 0,
+        "humidity": 0,
+        "pressure": 0,
+        "hour": 0,
+        "dayofweek": 0,
+        "is_weekend": 0,
+        "is_holiday": 0,
+        "month": 0,
+        "sin_hour": 0,
+        "cos_hour": 0,
+        "sin_month": 0,
+        "cos_month": 0,
+        "lag_1": 0,
+        "lag_2": 0,
+        "lag_48": 0,
+        "lag_336": 0,
+        "rolling_mean_48": 0
+    },
+    "total_runtime_seconds": 1.19
+}
