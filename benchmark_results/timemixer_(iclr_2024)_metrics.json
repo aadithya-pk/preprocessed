@@ -1,0 +1,9 @@
+{
+    "model": "TimeMixer (ICLR 2024)",
+    "MAE_kWh": 42.3809,
+    "RMSE_kWh": 55.6632,
+    "WAPE_pct": 3.52,
+    "MAPE_pct": 3.82,
+    "R2_score": 0.9807,
+    "train_time_sec": 28.49
+}

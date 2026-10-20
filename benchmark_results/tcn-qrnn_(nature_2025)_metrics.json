@@ -1,0 +1,9 @@
+{
+    "model": "TCN-QRNN (Nature 2025)",
+    "MAE_kWh": 35.382,
+    "RMSE_kWh": 47.7109,
+    "WAPE_pct": 2.94,
+    "MAPE_pct": 2.9,
+    "R2_score": 0.9858,
+    "train_time_sec": 447.28
+}

@@ -1,0 +1,9 @@
+{
+    "model": "EMSformer (IEEE TPWRS 2025)",
+    "MAE_kWh": 84.4921,
+    "RMSE_kWh": 103.6372,
+    "WAPE_pct": 7.01,
+    "MAPE_pct": 6.82,
+    "R2_score": 0.9331,
+    "train_time_sec": 836.04
+}

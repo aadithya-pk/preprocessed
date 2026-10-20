@@ -1,0 +1,9 @@
+{
+    "model": "LTE Hybrid (IEEE TSG 2025)",
+    "MAE_kWh": 58.0183,
+    "RMSE_kWh": 75.624,
+    "WAPE_pct": 4.82,
+    "MAPE_pct": 4.57,
+    "R2_score": 0.9644,
+    "train_time_sec": 5672.18
+}

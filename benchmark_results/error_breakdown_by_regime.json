@@ -1,0 +1,74 @@
+{
+    "LightGBM": {
+        "Overall_MAE": 25.02,
+        "Peak_Hour_MAE": 27.93,
+        "Base_Load_MAE": 14.53,
+        "Weekend_MAE": 24.01,
+        "Cold_Snap_MAE": 24.13,
+        "Max_Error": 171.81
+    },
+    "TCN-QRNN (Nature 2025)": {
+        "Overall_MAE": 35.38,
+        "Peak_Hour_MAE": 53.45,
+        "Base_Load_MAE": 16.13,
+        "Weekend_MAE": 35.11,
+        "Cold_Snap_MAE": 31.37,
+        "Max_Error": 217.26
+    },
+    "TimeMixer (ICLR 2024)": {
+        "Overall_MAE": 42.38,
+        "Peak_Hour_MAE": 40.93,
+        "Base_Load_MAE": 29.91,
+        "Weekend_MAE": 48.4,
+        "Cold_Snap_MAE": 40.8,
+        "Max_Error": 268.71
+    },
+    "DLinear (AAAI 2023)": {
+        "Overall_MAE": 43.42,
+        "Peak_Hour_MAE": 37.81,
+        "Base_Load_MAE": 38.34,
+        "Weekend_MAE": 42.85,
+        "Cold_Snap_MAE": 51.65,
+        "Max_Error": 251.63
+    },
+    "LTE Hybrid (IEEE TSG 2025)": {
+        "Overall_MAE": 58.02,
+        "Peak_Hour_MAE": 104.0,
+        "Base_Load_MAE": 22.76,
+        "Weekend_MAE": 52.18,
+        "Cold_Snap_MAE": 52.19,
+        "Max_Error": 321.95
+    },
+    "iTransformer (ICLR 2024)": {
+        "Overall_MAE": 71.91,
+        "Peak_Hour_MAE": 101.57,
+        "Base_Load_MAE": 54.7,
+        "Weekend_MAE": 69.58,
+        "Cold_Snap_MAE": 76.06,
+        "Max_Error": 300.69
+    },
+    "EMSformer (IEEE TPWRS 2025)": {
+        "Overall_MAE": 84.49,
+        "Peak_Hour_MAE": 159.94,
+        "Base_Load_MAE": 40.64,
+        "Weekend_MAE": 86.71,
+        "Cold_Snap_MAE": 76.7,
+        "Max_Error": 383.33
+    },
+    "PatchTST (ICLR 2023)": {
+        "Overall_MAE": 200.72,
+        "Peak_Hour_MAE": 335.25,
+        "Base_Load_MAE": 109.19,
+        "Weekend_MAE": 190.79,
+        "Cold_Snap_MAE": 138.84,
+        "Max_Error": 679.13
+    },
+    "Novel MS-STLFNet (Proposed Hybrid)": {
+        "Overall_MAE": 43.88,
+        "Peak_Hour_MAE": 75.76,
+        "Base_Load_MAE": 24.04,
+        "Weekend_MAE": 40.98,
+        "Cold_Snap_MAE": 39.79,
+        "Max_Error": 237.46
+    }
+}

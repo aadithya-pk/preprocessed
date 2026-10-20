@@ -1,0 +1,9 @@
+{
+    "model": "Novel MS-STLFNet (Proposed Hybrid)",
+    "MAE_kWh": 43.8841,
+    "RMSE_kWh": 57.8637,
+    "WAPE_pct": 3.64,
+    "MAPE_pct": 3.62,
+    "R2_score": 0.9792,
+    "train_time_sec": 441.54
+}

@@ -1,0 +1,9 @@
+{
+    "model": "LightGBM",
+    "MAE_kWh": 25.0868,
+    "RMSE_kWh": 32.5678,
+    "WAPE_pct": 2.08,
+    "MAPE_pct": 2.16,
+    "R2_score": 0.9934,
+    "train_time_sec": 1.6
+}

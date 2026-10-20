@@ -1,0 +1,9 @@
+{
+    "model": "PatchTST (ICLR 2023)",
+    "MAE_kWh": 200.7245,
+    "RMSE_kWh": 237.0993,
+    "WAPE_pct": 16.66,
+    "MAPE_pct": 16.63,
+    "R2_score": 0.65,
+    "train_time_sec": 719.77
+}

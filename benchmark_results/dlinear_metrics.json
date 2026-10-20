@@ -1,0 +1,9 @@
+{
+    "model": "DLinear",
+    "MAE_kWh": 43.4224,
+    "RMSE_kWh": 54.2036,
+    "WAPE_pct": 3.6,
+    "MAPE_pct": 3.95,
+    "R2_score": 0.9817,
+    "train_time_sec": 13.57
+}

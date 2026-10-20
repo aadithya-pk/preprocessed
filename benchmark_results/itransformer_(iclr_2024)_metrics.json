@@ -1,0 +1,9 @@
+{
+    "model": "iTransformer (ICLR 2024)",
+    "MAE_kWh": 71.9131,
+    "RMSE_kWh": 86.4556,
+    "WAPE_pct": 5.97,
+    "MAPE_pct": 6.23,
+    "R2_score": 0.9535,
+    "train_time_sec": 217.37
+}
