@@ -1,5 +1,8 @@
 model,MAE_kWh,RMSE_kWh,WAPE_pct,MAPE_pct,R2_score,train_time_sec
 LightGBM,25.0868,32.5678,2.08,2.16,0.9934,1.6
+Novel 1: MSD-TCN (TimeMixer+TCN+DLinear),28.5521,37.0017,2.37,2.47,0.9915,434.36
+Novel 2: D-PABNet (Decomp+Patch+Transformer+BiLSTM),30.8783,39.5864,2.56,2.63,0.9902,188.63
+Novel 3: H-MoE-Boost (Super-Hybrid Champion),30.8983,41.4581,2.56,2.57,0.9893,198.53
 TCN-QRNN (Nature 2025),35.382,47.7109,2.94,2.9,0.9858,447.28
 TimeMixer (ICLR 2024),42.3809,55.6632,3.52,3.82,0.9807,28.49
 DLinear,43.4224,54.2036,3.6,3.95,0.9817,13.57

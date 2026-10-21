@@ -70,5 +70,29 @@
         "Weekend_MAE": 40.98,
         "Cold_Snap_MAE": 39.79,
         "Max_Error": 237.46
+    },
+    "Novel 1: MSD-TCN": {
+        "Overall_MAE": 28.55,
+        "Peak_Hour_MAE": 32.3,
+        "Base_Load_MAE": 19.32,
+        "Weekend_MAE": 27.93,
+        "Cold_Snap_MAE": 23.6,
+        "Max_Error": 183.38
+    },
+    "Novel 2: D-PABNet": {
+        "Overall_MAE": 30.88,
+        "Peak_Hour_MAE": 36.32,
+        "Base_Load_MAE": 15.41,
+        "Weekend_MAE": 27.59,
+        "Cold_Snap_MAE": 26.26,
+        "Max_Error": 159.94
+    },
+    "Novel 3: H-MoE-Boost": {
+        "Overall_MAE": 30.9,
+        "Peak_Hour_MAE": 44.08,
+        "Base_Load_MAE": 14.47,
+        "Weekend_MAE": 27.53,
+        "Cold_Snap_MAE": 27.75,
+        "Max_Error": 205.66
     }
 }
