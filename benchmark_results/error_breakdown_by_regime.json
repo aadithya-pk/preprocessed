@@ -94,5 +94,13 @@
         "Weekend_MAE": 27.53,
         "Cold_Snap_MAE": 27.75,
         "Max_Error": 205.66
+    },
+    "Champion: STLF-SuperEnsemble": {
+        "Overall_MAE": 21.64,
+        "Peak_Hour_MAE": 23.39,
+        "Base_Load_MAE": 11.55,
+        "Weekend_MAE": 21.69,
+        "Cold_Snap_MAE": 19.5,
+        "Max_Error": 154.88
     }
 }

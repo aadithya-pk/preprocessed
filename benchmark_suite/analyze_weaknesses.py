@@ -24,7 +24,8 @@ def analyze_all_models():
         'Novel MS-STLFNet (Proposed Hybrid)': 'preds_novel_ms_stlfnet.csv',
         'Novel 1: MSD-TCN': 'preds_novel_1_msd_tcn.csv',
         'Novel 2: D-PABNet': 'preds_novel_2_dpabnet.csv',
-        'Novel 3: H-MoE-Boost': 'preds_novel_3_h_moe_boost.csv'
+        'Novel 3: H-MoE-Boost': 'preds_novel_3_h_moe_boost.csv',
+        'Champion: STLF-SuperEnsemble': 'preds_champion_super_ensemble.csv'
     }
 
     # Load predictions
