@@ -1,0 +1,12 @@
+Baseline_Model,Baseline_MAE_kWh,Champion_MAE_kWh,MAE_Reduction_pct,Champion_Win_Rate_pct,DM_Statistic,P_Value,Statistical_Significance
+LightGBM,25.02,21.64,13.5,59.8,11.53,< 0.0001,Statistically Significant (p < 0.001)
+Novel 1: MSD-TCN,28.55,21.64,24.2,63.2,15.42,< 0.0001,Statistically Significant (p < 0.001)
+Novel 2: D-PABNet,30.88,21.64,29.9,66.1,17.69,< 0.0001,Statistically Significant (p < 0.001)
+Novel 3: H-MoE-Boost,30.9,21.64,30.0,62.1,14.94,< 0.0001,Statistically Significant (p < 0.001)
+TCN-QRNN (Nature 2025),35.38,21.64,38.8,67.0,15.59,< 0.0001,Statistically Significant (p < 0.001)
+TimeMixer (ICLR 2024),42.38,21.64,48.9,72.5,17.77,< 0.0001,Statistically Significant (p < 0.001)
+DLinear (AAAI 2023),43.42,21.64,50.2,76.2,19.69,< 0.0001,Statistically Significant (p < 0.001)
+LTE Hybrid (IEEE TSG 2025),58.02,21.64,62.7,78.6,17.12,< 0.0001,Statistically Significant (p < 0.001)
+iTransformer (ICLR 2024),71.91,21.64,69.9,84.6,25.04,< 0.0001,Statistically Significant (p < 0.001)
+EMSformer (IEEE TPWRS 2025),84.49,21.64,74.4,88.1,20.16,< 0.0001,Statistically Significant (p < 0.001)
+PatchTST (ICLR 2023),200.72,21.64,89.2,96.2,25.07,< 0.0001,Statistically Significant (p < 0.001)
