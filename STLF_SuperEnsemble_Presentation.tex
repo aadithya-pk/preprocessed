@@ -138,27 +138,25 @@
 \section{Literature Survey}
 \begin{frame}{Literature Survey}
   \scriptsize
-  \begin{tabular}{p{2.3cm}p{5.5cm}p{5.5cm}}
+  \begin{tabular}{p{2.6cm}p{5.2cm}p{5.4cm}}
     \toprule
-    \textbf{Author, Year} & \textbf{Core Contribution} & \textbf{Limitation} \\ \midrule
-    Ullah et al., 2024 & Hybrid CNN--LSTM combining spatial and temporal feature learning for STLF & Needs large, high-quality data; probabilistic forecasting left as future work \\
-    Shapi et al., 2021 & Compares SVM, ANN, k-NN for commercial-building energy prediction & Evaluated on only two buildings; limited generalisability \\
-    Chinnaraji \& Ragupathy, 2022 & Enhanced LSTM with tuned hyperparameters and ReLU activation & Validated only on the UCI household dataset; heavy tuning \\
-    Yang et al., 2023 & VMD--MI--LSTM: decomposition + feature selection + LSTM & High computational complexity from multiple preprocessing stages \\
-    Wu \& Wu, 2024 & CNN + BiLSTM + self-attention outperforms SVM, GRU, linear regression & Needs large data and compute; validation on newer datasets required \\ \bottomrule
+    \textbf{Model \& Venue} & \textbf{Core Mechanism} & \textbf{Identified Limitation in STLF} \\ \midrule
+    \textbf{DLinear}\newline (AAAI 2023) & Linear mapping on trend and seasonal decomposed components & Incapable of capturing non-linear weather-load interactions and abrupt cold snaps. \\ \addlinespace
+    \textbf{LightGBM}\newline (NeurIPS 2017) & Histogram-based gradient boosted trees over tabular lag/weather & Predicts rigid piece-wise step functions; lags behind continuous demand ramping. \\ \addlinespace
+    \textbf{TimeMixer}\newline (ICLR 2024) & Decomposable multi-scale mixing across temporal resolutions & Highly sensitive to high-frequency domestic consumption noise on aggregated grids. \\ \addlinespace
+    \textbf{TCN-QRNN}\newline (Sci. Rep. 2025) & Dilated causal 1D convolutions + Quasi-RNN temporal cells & Suffers gradient decay over 336 lag steps; high training latency (447.3s). \\ \bottomrule
   \end{tabular}
 \end{frame}
 
 \begin{frame}{Literature Survey (contd.)}
   \scriptsize
-  \begin{tabular}{p{2.3cm}p{5.5cm}p{5.5cm}}
+  \begin{tabular}{p{2.6cm}p{5.2cm}p{5.4cm}}
     \toprule
-    \textbf{Author, Year} & \textbf{Core Contribution} & \textbf{Limitation} \\ \midrule
-    Ottens et al., 2023 & Cascaded XGBoost + LightGBM with feature engineering/selection & Needs careful feature engineering; mainly single-benchmark validation \\
-    Zhang \& Hong, 2025 & BFEEMD--LSTM--TWSVR--SOA hybrid for point and probabilistic forecasts & Computationally complex; multiple optimisation stages \\
-    Pentsos et al., 2025 & LSTM + Transformer attention for short- and long-term dependencies & Higher computational cost; harder to tune \\
-    Fang et al., 2025 & Single DL framework predicting multiple future steps at once & Needs large history; error accumulates over longer horizons \\
-    Li et al., 2026 & BiLSTM + GCN with dynamic graph fusion (SFDRLF) & Computationally complex; depends on well-structured data \\ \bottomrule
+    \textbf{Model \& Venue} & \textbf{Core Mechanism} & \textbf{Identified Limitation in STLF} \\ \midrule
+    \textbf{PatchTST}\newline (ICLR 2023) & Subseries patch tokenization with Channel Independence & Channel independence isolates weather, destroying physical cross-variate couplings ($R^2=0.65$). \\ \addlinespace
+    \textbf{iTransformer}\newline (ICLR 2024) & Inverted dimension tokens (treating whole variates as tokens) & High variance and severe error compounding on noisy residential smart-meter feeds. \\ \addlinespace
+    \textbf{EMSformer}\newline (IEEE TPWRS 2025) & Domain-specific spatial-temporal transformer for energy grids & Softmax self-attention flattens evening peaks; severe over-smoothing (84.49 kWh MAE). \\ \addlinespace
+    \textbf{LTE Hybrid}\newline (IEEE TSG 2025) & Multi-stage deep hybrid for distribution grid forecasting & Massive computational overhead (5,672s training) with persistent peak degradation (104.00 kWh). \\ \bottomrule
   \end{tabular}
 \end{frame}
 
