@@ -51,8 +51,8 @@ def generate_all_figures():
                 preds_data[name] = df_p['pred_kWh'].values[48:]
 
     # Select winter peak week (336 half-hours = 7 days)
-    # Peak winter week in late December (Dec 23-30, 2013)
-    start_idx = 2600
+    # Clean Monday-to-Sunday winter week (Dec 23-29, 2013): index 2644 to 2980
+    start_idx = 2644
     end_idx = start_idx + 336
     time_window = eval_df['tstp'].iloc[start_idx:end_idx]
 
@@ -70,7 +70,7 @@ def generate_all_figures():
     plt.plot(time_window, preds_data['EMSformer (IEEE TPWRS 2025)'][start_idx:end_idx], 
              label='EMSformer (IEEE 2025 - MAE 84.49)', color='#ea580c', linestyle=':', linewidth=1.2, alpha=0.7)
 
-    plt.title('7-Day Grid Load Tracking During Winter Peak Demand (London Smart Grid: Dec 23–30, 2013)', fontweight='bold', pad=12)
+    plt.title('7-Day Grid Load Tracking During Winter Peak Demand (London Smart Grid: Dec 23–29, 2013)', fontweight='bold', pad=12)
     plt.xlabel('Timestamp (30-Minute Intervals)', fontweight='bold')
     plt.ylabel('Aggregated Grid Load (kWh)', fontweight='bold')
     plt.grid(True, linestyle='--', alpha=0.4)

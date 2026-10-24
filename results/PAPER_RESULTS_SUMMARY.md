@@ -73,7 +73,7 @@ This document and the associated files in this `results/` folder present the com
 
 ## 5. Visual Proof & Publication Figures in `results/`
 1. **[Figure_1_load_tracking_peak_week.png](file:///d:/dataset/smart%20london/results/Figure_1_load_tracking_peak_week.png)**:
-   * **Content**: 7-day continuous actual vs. predicted load tracking during London's coldest winter peak week (Dec 23–30, 2013).
+   * **Content**: 7-day continuous actual vs. predicted load tracking during London's coldest winter peak week (Dec 23–29, 2013).
    * **What it proves**: Proves that the Champion tracks rapid evening peak spikes and valley loads without phase delay, whereas baseline transformers either flatten or oscillate.
 2. **[Figure_2_regime_stress_comparison.png](file:///d:/dataset/smart%20london/results/Figure_2_regime_stress_comparison.png)**:
    * **Content**: Multi-axis radar stress chart comparing model stability across Peak Hours, Base Load, Cold Snaps, and Weekends.

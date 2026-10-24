@@ -1,0 +1,9 @@
+{
+    "model": "Champion: STLF-SuperEnsemble (GBDT+TCN+PatchBiLSTM)",
+    "MAE_kWh": 21.6369,
+    "RMSE_kWh": 28.4572,
+    "WAPE_pct": 1.8,
+    "MAPE_pct": 1.83,
+    "R2_score": 0.995,
+    "train_time_sec": 0.28
+}
