@@ -101,6 +101,9 @@
       \begin{block}{05. Statistical Rigor \& Insights}
         \footnotesize Diebold-Mariano tests ($p < 0.0001$), orthogonal error residuals, and deployment takeaways.
       \end{block}
+      \begin{block}{06. Practical Deployment \& Conclusions}
+        \footnotesize Sub-second online dispatch, operational limitations, and key research milestones.
+      \end{block}
   \end{columns}
 \end{frame}
 
@@ -183,32 +186,39 @@
 
 \begin{frame}{Literature Survey Zoo (Part 2: Transformers \& Hybrids)}
   \scriptsize
-  \begin{tabular}{p{2.2cm}p{2.8cm}p{4.2cm}p{4.2cm}}
+  \begin{tabular}{p{2.1cm}p{2.6cm}p{4.1cm}p{4.7cm}}
     \toprule
     \textbf{Model \& Venue} & \textbf{Core Mechanism} & \textbf{Architectural Strength} & \textbf{Identified Failure Mode in STLF} \\ \midrule
-    \textbf{PatchTST}\newline (ICLR 2023) & Subseries patch tokenization with Channel Independence & Reduces quadratic attention complexity; preserves local context & Channel independence treats weather as isolated channels, destroying cross-variate correlations ($R^2=0.65$). \\ \addlinespace
-    \textbf{iTransformer}\newline (ICLR 2024) & Inverted dimension tokens (variates as tokens) & Excellent on multi-variate interactions across macro economic series & High variance and severe error compounding on volatile household smart-meter feeds. \\ \addlinespace
+    \textbf{PatchTST}\newline (ICLR 2023) & Subseries patch tokenization with Channel Independence & Reduces quadratic attention complexity; preserves local context & Channel independence isolates weather, destroying physical couplings ($R^2=0.65$). \\ \addlinespace
+    \textbf{iTransformer}\newline (ICLR 2024) & Inverted dimension tokens (variates as tokens) & Excellent on multi-variate interactions across macro series & High variance and severe error compounding on volatile household smart-meter feeds. \\ \addlinespace
     \textbf{EMSformer}\newline (IEEE TPWRS 2025) & Multi-head attention designed for energy grids & Specialized domain design for transmission-level power systems & Softmax self-attention flattens evening peaks; suffers severe over-smoothing (84.49 kWh MAE). \\ \addlinespace
     \textbf{TCN-QRNN / LTE-Hybrid} & Causal 1D convolutions + Quasi-RNN / LSTM & Deep temporal receptive fields without future leakage & Suffers gradient decay over 336 lag steps; massive compute overhead (5,672s training time). \\ \bottomrule
   \end{tabular}
 \end{frame}
 
 \begin{frame}{The 5 Critical Research Gaps}
-  \begin{block}{Gap 1: Inductive Bias Rigidity}
-    \footnotesize Literature relies on single-family architectures (pure trees or pure transformers), forcing a trade-off between tabular feature mastery and temporal continuity.
-  \end{block}
-  \begin{block}{Gap 2: Transformer Over-Smoothing on Extreme Peaks}
-    \footnotesize Attention-based models flatten sharp morning and evening peaks, leading to catastrophic errors during high-stress operational hours.
-  \end{block}
-  \begin{block}{Gap 3: Channel Independence Fallacy}
-    \footnotesize Modern models (e.g., PatchTST) isolate channels to reduce compute, failing to model physical temperature and solar couplings.
-  \end{block}
-  \begin{block}{Gap 4: The Accuracy-Efficiency Barrier}
-    \footnotesize Complex deep models require hours of GPU training and hundreds of seconds for inference, making them impractical for 30-minute real-time grid dispatch.
-  \end{block}
-  \begin{block}{Gap 5: The Failure of Sequential Stacking}
-    \footnotesize Chaining tree predictions sequentially into neural networks suffers from severe error compounding.
-  \end{block}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \begin{block}{Gap 1: Inductive Bias Rigidity}
+        \footnotesize Literature relies on single-family architectures (trees or transformers), forcing a trade-off between tabular splits and temporal continuity.
+      \end{block}
+      \begin{block}{Gap 2: Attention Over-Smoothing}
+        \footnotesize Softmax self-attention averages temporal variance, leading to peak clipping during high-stress operational hours.
+      \end{block}
+      \begin{block}{Gap 3: Channel Independence Fallacy}
+        \footnotesize Modern models isolate channels, failing to capture weather-load physical interactions ($R^2=0.65$).
+      \end{block}
+    \column{0.48\textwidth}
+      \begin{block}{Gap 4: Accuracy--Efficiency Barrier}
+        \footnotesize Deep models require hours of training and hundreds of seconds for inference, impeding 30-min real-time dispatch.
+      \end{block}
+      \begin{block}{Gap 5: Failure of Sequential Stacking}
+        \footnotesize Feeding GBDT outputs sequentially into neural networks causes severe error compounding (43.88 kWh MAE).
+      \end{block}
+      \begin{beamercolorbox}[sep=3pt,center,rounded=true]{palette primary}
+        \footnotesize\textbf{Research Void:} Need for parallel orthogonal convex fusion.
+      \end{beamercolorbox}
+  \end{columns}
 \end{frame}
 
 \begin{frame}{Project Objectives}
@@ -459,7 +469,7 @@
   \end{enumerate}
 \end{frame}
 
-\begin{frame}[allowframebreaks]{References Zoo}
+\begin{frame}{References}
   \tiny
   \begin{enumerate}
     \item Y. Nie et al., ``A Time Series is Worth 64 Words: Long-term Forecasting with Transformers (PatchTST),'' in \emph{Proc. ICLR}, 2023.
