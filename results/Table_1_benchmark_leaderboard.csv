@@ -1,6 +1,6 @@
 model,MAE_kWh,RMSE_kWh,WAPE_pct,MAPE_pct,R2_score,train_time_sec,Error_Reduction_vs_LGBM_pct
 Champion: STLF-SuperEnsemble (GBDT+TCN+PatchBiLSTM),21.6369,28.4572,1.8,1.83,0.995,0.28,13.52
-LightGBM,25.0868,32.5678,2.08,2.16,0.9934,1.6,-0.27
+LightGBM,25.0868,32.5678,2.08,2.16,0.9934,1.6,0.00
 Novel 1: MSD-TCN (TimeMixer+TCN+DLinear),28.5521,37.0017,2.37,2.47,0.9915,434.36,-14.12
 Novel 2: D-PABNet (Decomp+Patch+Transformer+BiLSTM),30.8783,39.5864,2.56,2.63,0.9902,188.63,-23.41
 Novel 3: H-MoE-Boost (Super-Hybrid Champion),30.8983,41.4581,2.56,2.57,0.9893,198.53,-23.49
