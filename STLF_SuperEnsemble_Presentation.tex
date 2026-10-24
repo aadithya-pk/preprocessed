@@ -2,23 +2,22 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric,arrows.meta,positioning,fit}
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{colortbl}
-\usepackage{xcolor}
 
 \usetheme{Madrid}
 \usecolortheme{default}
-
-% IEEE Modern Color Palette
-\definecolor{ieeeblue}{RGB}{15,23,42}       % Deep Navy #0F172A
-\definecolor{ieeelightblue}{RGB}{37,99,235}  % Accent Blue #2563EB
-\definecolor{ieeegreen}{RGB}{22,163,74}      % Accent Green #16A34A
-\definecolor{ieeeorange}{RGB}{234,88,12}     % Accent Orange #EA580C
-\definecolor{cardbg}{RGB}{241,245,249}       % Soft Slate #F1F5F9
-\definecolor{championhighlight}{RGB}{220,252,231} % Light Green #DCFCE7
+\definecolor{ieeeblue}{RGB}{0,51,102}
+\definecolor{ieeelightblue}{RGB}{0,98,155}
+\definecolor{archblue}{RGB}{102,178,255}
+\definecolor{archgreen}{RGB}{76,175,80}
+\definecolor{archorange}{RGB}{255,183,77}
+\definecolor{championhighlight}{RGB}{220,252,231}
 
 \setbeamercolor{structure}{fg=ieeeblue}
 \setbeamercolor{palette primary}{bg=ieeeblue,fg=white}
@@ -26,37 +25,23 @@
 \setbeamercolor{palette tertiary}{bg=ieeeblue,fg=white}
 \setbeamercolor{title}{fg=white,bg=ieeeblue}
 \setbeamercolor{subtitle}{fg=white,bg=ieeeblue}
+\setbeamercolor{author}{fg=black,bg=white}
+\setbeamercolor{institute}{fg=black,bg=white}
+\setbeamercolor{date}{fg=black,bg=white}
 \setbeamercolor{frametitle}{bg=ieeeblue,fg=white}
-\setbeamercolor{block title}{bg=ieeeblue,fg=white}
-\setbeamercolor{block body}{bg=cardbg,fg=black}
-\setbeamercolor{block title alerted}{bg=ieeeorange,fg=white}
-\setbeamercolor{block body alerted}{bg=cardbg,fg=black}
-\setbeamercolor{block title example}{bg=ieeegreen,fg=white}
-\setbeamercolor{block body example}{bg=cardbg,fg=black}
-
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{footline}[frame number]
 \setbeamerfont{frametitle}{series=\bfseries}
 
-% Look for images in the current directory AND in the results/ subfolder
+% Look for images in the current directory and results/
 \graphicspath{{./}{./results/}}
 
-% Helper command for responsive figure frames
-\newcommand{\figframe}[3]{% #1 = file, #2 = height fraction, #3 = takeaway
-  \centering
-  \includegraphics[width=\textwidth,height=#2\textheight,keepaspectratio]{#1}\\[4pt]
-  \begin{beamercolorbox}[sep=3pt,center,rounded=true,shadow=false]{block body}
-    \footnotesize\textbf{Key Takeaway:} #3
-  \end{beamercolorbox}
-}
-
-% Presentation Metadata
-\title[STLF-SuperEnsemble]{\textbf{LOAD FORECASTING}}
-\subtitle{A Convex Hybrid Ensemble (GBDT + TCN + PatchBiLSTM) Benchmarked on the London Smart Meter Grid}
+\title[Load Forecasting]{\textbf{LOAD FORECASTING}}
+\subtitle{A Convex Hybrid Ensemble (GBDT + TCN + PatchBiLSTM) Benchmarked on the London Smart Meter Grid Dataset}
 \author[Group 18]{%
   \small
-  \textbf{Presented by: Group 18}\\[4pt]
-  \begin{tabular}{@{}l@{\hspace{1.5cm}}l@{}}
+  Presented by: Group 18\\[4pt]
+  \begin{tabular}{@{}l@{\hspace{1.2cm}}l@{}}
     AADITHYA PK        & B23CSB02 \\
     ASHIK ALI          & B23CSB22 \\
     SAHIL RAMZAN BHAT  & B23CSB57 \\
@@ -65,441 +50,494 @@
 }
 \institute[TKM CE]{%
   \footnotesize
-  \textbf{Department of Computer Science and Engineering, TKM College of Engineering}\\[2pt]
-  \textbf{Project Supervisor:} Dr. Anantha Padmanabhan N. K.
+  Dept. of Computer Science and Engineering, TKM College of Engineering\\[2pt]
+  Supervisor: Dr. Anantha Padmanabhan N. K.
 }
-\date{October 2026}
+\date{Date of Presentation: 22/10/2026}
 
 \begin{document}
 
-% ------------------------------------------------------------
-% SLIDE 1: Title Slide
-% ------------------------------------------------------------
-\begin{frame}
-  \titlepage
-\end{frame}
-
-% ------------------------------------------------------------
-% SLIDE 2: Executive Agenda
-% ------------------------------------------------------------
-\begin{frame}{Executive Presentation Agenda}
-  \begin{columns}[T]
-    \column{0.48\textwidth}
-      \begin{block}{01. Motivation \& Technical Need}
-        \footnotesize Smart grid balancing economics and the Inductive Bias Dilemma in load forecasting.
-      \end{block}
-      \begin{block}{02. Literature Survey Zoo (2023--2025)}
-        \footnotesize Mechanics and failure points of 8 peer-reviewed architectures (Transformers vs. Trees).
-      \end{block}
-      \begin{block}{03. Proposed System Architecture}
-        \footnotesize 3-stream parallel design: LightGBM, MSD-TCN, and D-PABNet with 0.28s convex optimization.
-      \end{block}
-    \column{0.48\textwidth}
-      \begin{block}{04. Comprehensive Empirical Results}
-        \footnotesize 14-model primary benchmark, winter peak tracking, regime stress tests, and Pareto frontier.
-      \end{block}
-      \begin{block}{05. Statistical Rigor \& Insights}
-        \footnotesize Diebold-Mariano tests ($p < 0.0001$), orthogonal error residuals, and deployment takeaways.
-      \end{block}
-      \begin{block}{06. Practical Deployment \& Conclusions}
-        \footnotesize Sub-second online dispatch, operational limitations, and key research milestones.
-      \end{block}
-  \end{columns}
-\end{frame}
+% ============================================================
+% SLIDE 1: Title
+% ============================================================
+\begin{frame}\titlepage\end{frame}
 
 % ============================================================
-% SECTION 1: MOTIVATION & PROBLEM STATEMENT
+% SLIDE 2: Overview
 % ============================================================
-\section{Motivation \& Problem Statement}
+\begin{frame}{Overview}\tableofcontents\end{frame}
 
-\begin{frame}{Introduction \& Grid Balancing Economics}
+% ============================================================
+% SLIDE 3: Introduction
+% ============================================================
+\section{Introduction}
+\begin{frame}{Introduction}
   \begin{itemize}
-    \item \textbf{Smart Grid Challenge:} Electricity grids must continuously maintain generation-demand equilibrium. Half-hour short-term load forecasting (STLF) governs real-time dispatch and spinning reserves.
-    \item \textbf{Operational Cost of Error:} In liberalized wholesale markets (e.g., UK National Grid), a 1\% forecast inaccuracy costs millions in thermal peaking plant penalties and wind/solar curtailment.
-    \item \textbf{Dataset Scale:} Benchmarked on the aggregated \textbf{London Smart Meter Grid} (5,567 households, 39,391 half-hourly timestamps, 2.3 years).
+    \item Electricity load forecasting predicts future demand from historical consumption and influencing factors such as weather and calendar effects.
+    \item Accurate short-term load forecasting (STLF) is vital for power-system planning, smart grids, renewable integration and demand response.
+    \item With smart meters, forecasting has moved from statistical methods to machine learning and deep learning.
   \end{itemize}
   \vspace{4pt}
-  \begin{block}{The Technical Dilemma}
-    Aggregating thousands of domestic smart meters creates sharp non-linear demand shifts driven by weather, domestic heating cycles, and calendar effects that neither simple linear models nor pure deep transformers can track reliably.
+  \begin{block}{Motivation}
+    Growing demand, distributed renewables, EVs and smart homes make grids more complex. Forecast errors raise operating costs and reduce grid stability, so accurate and practical short-term forecasts are needed.
   \end{block}
 \end{frame}
 
-\begin{frame}{Problem Statement: The Inductive Bias Mismatch}
-  \begin{columns}[T]
-    \column{0.48\textwidth}
-      \begin{alertblock}{Tree-Based Models (LightGBM)}
-        \footnotesize
-        \begin{itemize}
-          \item \textbf{Strength:} Excellent at capturing discrete calendar splits, bank holidays, and non-linear weather thresholds.
-          \item \textbf{Failure Point:} Decision trees split along orthogonal axes, predicting \textbf{piece-wise step functions}. They lag behind sudden continuous ramping gradients and extreme evening spikes.
-        \end{itemize}
-      \end{alertblock}
-    \column{0.48\textwidth}
-      \begin{alertblock}{Deep Sequence Models (Transformers)}
-        \footnotesize
-        \begin{itemize}
-          \item \textbf{Strength:} Model continuous temporal dependencies across long historical horizons.
-          \item \textbf{Failure Point:} Softmax self-attention acts as a \textbf{temporal low-pass filter}, over-smoothing high-frequency variance and underpredicting sharp peak demand.
-        \end{itemize}
-      \end{alertblock}
-  \end{columns}
-  \vspace{6pt}
-  \begin{beamercolorbox}[sep=4pt,center,rounded=true]{palette primary}
-    \textbf{Core Scientific Objective:} Formulate an architecture that fuses orthogonal inductive biases without error compounding or gradient instability.
-  \end{beamercolorbox}
+% ============================================================
+% SLIDE 4: Problem Statement
+% ============================================================
+\section{Problem Statement}
+\begin{frame}{Problem Statement}
+  \begin{itemize}
+    \item Aggregated grid load is \textbf{nonlinear, time-varying and strongly peaked}, which makes accurate forecasting difficult.
+    \item Recent deep models (Transformers, mixers, hybrids) are often evaluated on long-horizon benchmarks. It is unclear how they compare with strong tabular baselines on real smart-meter grid data under one common protocol.
+    \item Single models suffer from an \textbf{Inductive Bias Dilemma}:
+    \begin{itemize}
+      \item \textbf{Decision trees (GBDT):} predict piece-wise step functions and lag behind continuous demand ramps;
+      \item \textbf{Deep Transformers:} Softmax self-attention acts as a low-pass filter, over-smoothing morning and evening peaks;
+      \item \textbf{Operational degradation:} lose accuracy during \textbf{peak hours and cold snaps}, when risk is highest;
+      \item \textbf{Compute \& Rigor:} require heavy compute without matching accuracy gains, and rarely come with statistical proof.
+    \end{itemize}
+  \end{itemize}
+  \vspace{3pt}
+  \begin{alertblock}{Need}
+    An accurate, robust half-hour-ahead forecaster for aggregated London smart-meter load that fuses lagged load, weather and calendar information, and is validated against state-of-the-art models with regime-wise and statistical tests.
+  \end{alertblock}
 \end{frame}
 
+% ============================================================
+% SLIDE 5: Alignment with UN SDGs
+% ============================================================
+\section{Alignment with UN SDGs}
 \begin{frame}{Alignment with UN Sustainable Development Goals}
-  \begin{columns}[T]
-    \column{0.48\textwidth}
-      \begin{block}{SDG 7: Affordable \& Clean Energy}
-        \footnotesize Minimizes fossil-fueled spinning reserves by cutting forecast errors by \textbf{13.52\%}, maximizing renewable grid penetration.
-      \end{block}
-      \begin{block}{SDG 9: Industry, Innovation \& Infrastructure}
-        \footnotesize Provides an ultra-fast, data-driven AI digital layer for next-generation automated distribution management systems.
-      \end{block}
-    \column{0.48\textwidth}
-      \begin{block}{SDG 11: Sustainable Cities \& Communities}
-        \footnotesize Powers reliable smart-city energy management under extreme heatwaves and winter cold snaps.
-      \end{block}
-      \begin{block}{SDG 13: Climate Action}
-        \footnotesize Mitigates carbon emissions by eliminating inefficient peaker plant starts through accurate peak load tracking.
-      \end{block}
-  \end{columns}
+  \begin{block}{SDG 7 -- Affordable and Clean Energy}
+    Accurate load forecasting underpins smart grids and enables efficient energy management and renewable integration.
+  \end{block}
+  \begin{block}{SDG 9 -- Industry, Innovation and Infrastructure}
+    Applies AI/ML (hybrid GBDT and deep learning) to build intelligent, data-driven digital infrastructure for power systems.
+  \end{block}
+  \begin{block}{SDG 11 -- Sustainable Cities and Communities}
+    Reliable forecasts support smarter urban energy planning and demand response for smart cities.
+  \end{block}
+  \begin{block}{SDG 13 -- Climate Action}
+    Reduces energy wastage and improves renewable utilisation, lowering the carbon footprint.
+  \end{block}
 \end{frame}
 
 % ============================================================
-% SECTION 2: LITERATURE SURVEY & RESEARCH GAPS
+% SLIDES 6 & 7: Literature Survey
 % ============================================================
-\section{Literature Survey & Research Gaps}
-
-\begin{frame}{Literature Survey Zoo (Part 1: Linear, GBDT \& Mixers)}
+\section{Literature Survey}
+\begin{frame}{Literature Survey}
   \scriptsize
-  \begin{tabular}{p{2.2cm}p{2.8cm}p{4.2cm}p{4.2cm}}
+  \begin{tabular}{p{2.3cm}p{5.5cm}p{5.5cm}}
     \toprule
-    \textbf{Model \& Venue} & \textbf{Core Mechanism} & \textbf{Architectural Strength} & \textbf{Identified Failure Mode in STLF} \\ \midrule
-    \textbf{DLinear}\newline (AAAI 2023) & Linear mapping on trend and seasonal series & Computationally ultra-lightweight; handles simple periodic patterns & Incapable of learning non-linear weather-load interactions and abrupt cold snaps. \\ \addlinespace
-    \textbf{LightGBM}\newline (NeurIPS 2017) & Histogram-based Gradient Boosted Trees & Dominates tabular feature interactions, holiday flags, and lag splits & Predicts rigid step functions; cannot extrapolate smooth continuous ramping rates. \\ \addlinespace
-    \textbf{TimeMixer}\newline (ICLR 2024) & Decomposable multi-scale mixing architecture & Captures multi-resolution past dynamics across temporal scales & Highly sensitive to high-frequency domestic consumption noise; degrades on aggregated grids. \\ \bottomrule
+    \textbf{Author, Year} & \textbf{Core Contribution} & \textbf{Limitation} \\ \midrule
+    Ullah et al., 2024 & Hybrid CNN--LSTM combining spatial and temporal feature learning for STLF & Needs large, high-quality data; probabilistic forecasting left as future work \\
+    Shapi et al., 2021 & Compares SVM, ANN, k-NN for commercial-building energy prediction & Evaluated on only two buildings; limited generalisability \\
+    Chinnaraji \& Ragupathy, 2022 & Enhanced LSTM with tuned hyperparameters and ReLU activation & Validated only on the UCI household dataset; heavy tuning \\
+    Yang et al., 2023 & VMD--MI--LSTM: decomposition + feature selection + LSTM & High computational complexity from multiple preprocessing stages \\
+    Wu \& Wu, 2024 & CNN + BiLSTM + self-attention outperforms SVM, GRU, linear regression & Needs large data and compute; validation on newer datasets required \\ \bottomrule
   \end{tabular}
 \end{frame}
 
-\begin{frame}{Literature Survey Zoo (Part 2: Transformers \& Hybrids)}
+\begin{frame}{Literature Survey (contd.)}
   \scriptsize
-  \begin{tabular}{p{2.1cm}p{2.6cm}p{4.1cm}p{4.7cm}}
+  \begin{tabular}{p{2.3cm}p{5.5cm}p{5.5cm}}
     \toprule
-    \textbf{Model \& Venue} & \textbf{Core Mechanism} & \textbf{Architectural Strength} & \textbf{Identified Failure Mode in STLF} \\ \midrule
-    \textbf{PatchTST}\newline (ICLR 2023) & Subseries patch tokenization with Channel Independence & Reduces quadratic attention complexity; preserves local context & Channel independence isolates weather, destroying physical couplings ($R^2=0.65$). \\ \addlinespace
-    \textbf{iTransformer}\newline (ICLR 2024) & Inverted dimension tokens (variates as tokens) & Excellent on multi-variate interactions across macro series & High variance and severe error compounding on volatile household smart-meter feeds. \\ \addlinespace
-    \textbf{EMSformer}\newline (IEEE TPWRS 2025) & Multi-head attention designed for energy grids & Specialized domain design for transmission-level power systems & Softmax self-attention flattens evening peaks; suffers severe over-smoothing (84.49 kWh MAE). \\ \addlinespace
-    \textbf{TCN-QRNN / LTE-Hybrid} & Causal 1D convolutions + Quasi-RNN / LSTM & Deep temporal receptive fields without future leakage & Suffers gradient decay over 336 lag steps; massive compute overhead (5,672s training time). \\ \bottomrule
+    \textbf{Author, Year} & \textbf{Core Contribution} & \textbf{Limitation} \\ \midrule
+    Ottens et al., 2023 & Cascaded XGBoost + LightGBM with feature engineering/selection & Needs careful feature engineering; mainly single-benchmark validation \\
+    Zhang \& Hong, 2025 & BFEEMD--LSTM--TWSVR--SOA hybrid for point and probabilistic forecasts & Computationally complex; multiple optimisation stages \\
+    Pentsos et al., 2025 & LSTM + Transformer attention for short- and long-term dependencies & Higher computational cost; harder to tune \\
+    Fang et al., 2025 & Single DL framework predicting multiple future steps at once & Needs large history; error accumulates over longer horizons \\
+    Li et al., 2026 & BiLSTM + GCN with dynamic graph fusion (SFDRLF) & Computationally complex; depends on well-structured data \\ \bottomrule
   \end{tabular}
 \end{frame}
 
-\begin{frame}{The 5 Critical Research Gaps}
-  \begin{columns}[T]
-    \column{0.48\textwidth}
-      \begin{block}{Gap 1: Inductive Bias Rigidity}
-        \footnotesize Literature relies on single-family architectures (trees or transformers), forcing a trade-off between tabular splits and temporal continuity.
-      \end{block}
-      \begin{block}{Gap 2: Attention Over-Smoothing}
-        \footnotesize Softmax self-attention averages temporal variance, leading to peak clipping during high-stress operational hours.
-      \end{block}
-      \begin{block}{Gap 3: Channel Independence Fallacy}
-        \footnotesize Modern models isolate channels, failing to capture weather-load physical interactions ($R^2=0.65$).
-      \end{block}
-    \column{0.48\textwidth}
-      \begin{block}{Gap 4: Accuracy--Efficiency Barrier}
-        \footnotesize Deep models require hours of training and hundreds of seconds for inference, impeding 30-min real-time dispatch.
-      \end{block}
-      \begin{block}{Gap 5: Failure of Sequential Stacking}
-        \footnotesize Feeding GBDT outputs sequentially into neural networks causes severe error compounding (43.88 kWh MAE).
-      \end{block}
-      \begin{beamercolorbox}[sep=3pt,center,rounded=true]{palette primary}
-        \footnotesize\textbf{Research Void:} Need for parallel orthogonal convex fusion.
-      \end{beamercolorbox}
-  \end{columns}
+% ============================================================
+% SLIDES 8 & 9: Research Gaps
+% ============================================================
+\section{Research Gap}
+\begin{frame}{Research Gaps}
+  \begin{block}{Gap 1: Limited head-to-head benchmarking}
+    Recent Transformer/mixer models (PatchTST, iTransformer, TimeMixer, EMSformer) are seldom compared with strong tabular baselines such as LightGBM on real aggregated smart-meter data under one protocol.
+  \end{block}
+  \begin{block}{Gap 2: Heterogeneous hybrids underexplored}
+    Tree models capture feature interactions and deep models capture temporal patterns. Few works combine them through a validated convex blend.
+  \end{block}
+  \begin{block}{Gap 3: Robustness is rarely reported}
+    Most studies report overall MAE/RMSE only, not peak-hour, overnight, cold-snap or weekend behaviour.
+  \end{block}
 \end{frame}
 
-\begin{frame}{Project Objectives}
+\begin{frame}{Research Gaps (contd.)}
+  \begin{block}{Gap 4: Missing statistical validation}
+    Improvements are seldom backed by significance tests such as Diebold--Mariano.
+  \end{block}
+  \begin{block}{Gap 5: Accuracy--efficiency trade-off}
+    Advanced hybrids need large compute (hours of training) that limits practical deployment; the trade-off is seldom analysed explicitly.
+  \end{block}
+\end{frame}
+
+% ============================================================
+% SLIDE 10: Objectives
+% ============================================================
+\section{Objectives}
+\begin{frame}{Objectives}
+  \begin{itemize}
+    \item Build a reproducible pipeline that turns 5,567 household half-hourly meter streams into one aggregated grid-load series with weather and calendar features.
+    \item Propose \textbf{STLF-SuperEnsemble}, a convex ensemble of three complementary learners (GBDT + TCN + PatchBiLSTM).
+    \item Benchmark it against LightGBM, seven published models (2023--2025) and four additional hybrid variants under an identical chronological, leakage-free protocol.
+    \item Evaluate with MAE, RMSE, WAPE, MAPE, R\textsuperscript{2}, runtime, regime stress tests and Diebold--Mariano significance tests.
+    \item Analyse the accuracy--efficiency trade-off for smart-grid deployment.
+  \end{itemize}
+\end{frame}
+
+% ============================================================
+% SLIDES 11, 12, 13: Methodology
+% ============================================================
+\section{Methodology}
+\begin{frame}{Methodology -- Overview}
   \begin{enumerate}
-    \item \textbf{Construct a Standardized, Leak-Free Benchmark Suite:} Clean and aggregate 5,567 London household streams into 39,391 half-hourly timestamps with strict chronological partitioning.
-    \item \textbf{Evaluate 8 Literature Baselines Head-to-Head:} Benchmark modern deep and tabular architectures under an identical, leak-free evaluation protocol.
-    \item \textbf{Engineer Two Complementary Neural Specialists:}
-      \begin{itemize}
-        \item \textbf{MSD-TCN:} Multi-scale dilated causal convolutions for multi-frequency ramping.
-        \item \textbf{D-PABNet:} Decomposed patch self-attention coupled with bidirectional LSTM context.
-      \end{itemize}
-    \item \textbf{Formulate an Ultra-Fast Bounded Convex Fusion Engine:} Combine orthogonal learners via L-BFGS-B convex optimization converging in \textbf{0.28 seconds}.
-    \item \textbf{Empirical \& Statistical Validation:} Validate across 4 operational regimes and prove statistical significance via Diebold-Mariano testing ($p < 0.0001$).
+    \item Stream the 5,567-household half-hourly block files and sum energy per timestamp to get \texttt{grid\_load\_kWh}, along with the number of reporting households.
+    \item Fill short gaps (time interpolation, at most 4 steps) and drop the rest.
+    \item Resample hourly Dark Sky weather to 30 minutes and inner-join it with the grid load.
+    \item Engineer 19 input features: weather, calendar, holiday, cyclical, lag and rolling features.
+    \item Split chronologically into Train 70\% / Validation 15\% / Test 15\%; fit scalers on train only.
+    \item Train the 3 base learners (GBDT, TCN, PatchBiLSTM) and the comparison models; early stopping on validation.
+    \item Learn convex ensemble weights on validation, then evaluate once on the held-out test set.
+    \item Compare using accuracy metrics, regime stress tests and Diebold--Mariano tests.
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Methodology -- Preprocessing Details}
+  \small
+  \begin{itemize}
+    \item \textbf{Aggregation:} half-hourly \texttt{energy(kWh/hh)} is summed across all households per timestamp. The count of reporting households is kept as \texttt{n\_households}, and per-household load is derived from it.
+    \item \textbf{Gap handling:} the series is forced to a continuous 30-minute index; gaps of up to 4 steps (2 h) are time-interpolated and any remaining missing rows are dropped.
+    \item \textbf{Weather:} temperature, apparent temperature, humidity and pressure (hourly) are time-interpolated to 30 minutes and inner-joined on timestamp.
+    \item \textbf{Warm-up:} the first 7 days are dropped because of the 336-step lag.
+    \item \textbf{Outputs:} train/val/test CSVs, a 200-row verification sample and a metadata JSON summary.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Methodology -- Feature Engineering (19 inputs)}
+  \small
+  \begin{tabular}{p{3.4cm}p{9.3cm}}
+    \toprule
+    \textbf{Group} & \textbf{Features} \\ \midrule
+    Targets & \texttt{grid\_load\_kWh} (aggregated), \texttt{energy\_per\_household\_kWh} \\
+    Grid state & \texttt{n\_households} \\
+    Weather & temperature, apparent temperature, humidity, pressure \\
+    Calendar & hour, day of week, is\_weekend, month \\
+    Holiday & is\_holiday (UK bank holidays, Dec 2011 -- Jan 2014) \\
+    Cyclical & sin/cos of hour (24), sin/cos of month (12) \\
+    Lags & 30 min, 1 h, 24 h (48 steps), 7 days (336 steps) \\
+    Rolling & 24 h rolling mean (48 steps, computed on lagged series) \\ \bottomrule
+  \end{tabular}
+\end{frame}
+
+% ============================================================
+% SLIDE 14: Architecture
+% ============================================================
+\section{Architecture}
+\begin{frame}{Architecture -- End-to-End System}
+  \centering
+  \IfFileExists{architecture_repo.png}{%
+    \includegraphics[width=\textwidth,height=0.83\textheight,keepaspectratio]{architecture_repo.png}%
+  }{%
+    \includegraphics[width=\textwidth,height=0.83\textheight,keepaspectratio]{Figure_0_system_architecture.png}%
+  }
+\end{frame}
+
+% ============================================================
+% SLIDE 15: Algorithm
+% ============================================================
+\section{Algorithm}
+\begin{frame}{Algorithm}
+  \begin{enumerate}
+    \item Stream block files; compute aggregated load and household count per 30-minute timestamp.
+    \item Interpolate short gaps (at most 4 steps); merge interpolated hourly weather.
+    \item Build calendar, holiday, cyclical, lag and rolling features; drop the 7-day warm-up.
+    \item Split chronologically into train, validation and test; fit the standard scaler on train only.
+    \item For each model, build 48-step input windows and train to predict the next half-hour; use early stopping on validation.
+    \item Collect validation predictions of the base learners (GBDT, TCN, PatchBiLSTM).
+    \item Solve for convex weights ($w_i\ge0$, $\sum w_i=1$) on validation to form the SuperEnsemble.
+    \item Evaluate all models once on the held-out test set; run regime and Diebold--Mariano analyses.
   \end{enumerate}
 \end{frame}
 
 % ============================================================
-% SECTION 3: METHODOLOGY & ARCHITECTURE
+% SLIDES 16, 17, 18, 19: Dataset & Experiment Setup
 % ============================================================
-\section{Methodology & Proposed Architecture}
-
-\begin{frame}{Methodology: Leak-Free 3-Stage Pipeline}
-  \begin{columns}[T]
-    \column{0.32\textwidth}
-      \begin{block}{1. Data Ingestion}
-        \footnotesize
-        \begin{itemize}
-          \item 5,567 London smart meters summed to grid load.
-          \item Missing gaps $\le$ 4 steps (2 h) time-interpolated; rest dropped.
-          \item Dark Sky weather resampled to 30 min.
-        \end{itemize}
-      \end{block}
-    \column{0.32\textwidth}
-      \begin{block}{2. Feature Engineering}
-        \footnotesize
-        \begin{itemize}
-          \item \textbf{Weather:} Temp, humidity, pressure.
-          \item \textbf{Calendar:} Hour, day, month, UK bank holidays.
-          \item \textbf{Lags:} 30m, 1h, 24h (48 steps), 7d (336 steps).
-          \item \textbf{Rolling:} 24h rolling mean.
-        \end{itemize}
-      \end{block}
-    \column{0.32\textwidth}
-      \begin{block}{3. Chronological Splits}
-        \footnotesize
-        \begin{itemize}
-          \item \textbf{Train (70\%):} 27,573 steps (Nov 2011 -- Jun 2013).
-          \item \textbf{Val (15\%):} 5,909 steps (Jul 2013 -- Oct 2013).
-          \item \textbf{Test (15\%):} 5,861 steps (Oct 2013 -- Feb 2014, Winter).
-          \item Scalers fitted \textbf{on train only}.
-        \end{itemize}
-      \end{block}
-  \end{columns}
-\end{frame}
-
-\begin{frame}{System Architecture: End-to-End Topology}
-  \figframe{Figure_0_system_architecture.png}{0.75}{Three parallel specialist streams (Tabular, Wave, and Patch) unified via bounded convex optimization.}
-\end{frame}
-
-\begin{frame}{Why the Initial Prototype Failed (Ablation Analysis)}
-  \begin{columns}[T]
-    \column{0.48\textwidth}
-      \begin{alertblock}{Failed Prototype: Sequential Chaining (MS-STLFNet)}
-        \footnotesize
-        \begin{itemize}
-          \item \textbf{Design:} Fed LightGBM's predictions directly into a deep recurrent network to learn residuals.
-          \item \textbf{Failure Mode:} Errors from the first stage compounded in the second. The neural network overfit to tree artifacts, increasing test MAE to \textbf{43.88 kWh}.
-        \end{itemize}
-      \end{alertblock}
-    \column{0.48\textwidth}
-      \begin{exampleblock}{The Solution: Parallel Orthogonal Fusion}
-        \footnotesize
-        \begin{itemize}
-          \item \textbf{Design:} Isolate learners into independent parallel streams.
-          \item \textbf{Success Factor:} Base learners operate without mutual interference. Convex post-hoc optimization guarantees stability, driving MAE down to \textbf{21.64 kWh}.
-        \end{itemize}
-      \end{exampleblock}
-  \end{columns}
-\end{frame}
-
-\begin{frame}{The Novel Models Family: Path to the Champion}
-  \small
-  \begin{tabular}{p{2.6cm}p{4.2cm}p{3.2cm}r}
-    \toprule
-    \textbf{Model} & \textbf{Core Architectural Role} & \textbf{Key Components} & \textbf{Test MAE} \\ \midrule
-    \textbf{MSD-TCN}\newline (Novel 1) & Multi-scale wave specialist for rapid load ramping & Dilated causal 1D conv ($d=1,2,4,8$) + skip connections & 28.55 kWh \\ \addlinespace
-    \textbf{D-PABNet}\newline (Novel 2) & Patch specialist for smooth temporal context & Trend-seasonal split, 2h patch attention, BiLSTM & 30.88 kWh \\ \addlinespace
-    \textbf{H-MoE-Boost}\newline (Novel 3) & Dynamic Mixture of Experts via neural gating & Softmax gating network over tree and deep learners & 30.90 kWh \\ \addlinespace
-    \rowcolor{championhighlight}
-    \textbf{STLF-SuperEnsemble}\newline \textbf{(Champion)} & \textbf{Bounded convex parallel ensemble of orthogonal learners} & \textbf{LightGBM + MSD-TCN + D-PABNet + L-BFGS-B} & \textbf{21.64 kWh} \\ \bottomrule
-  \end{tabular}
-\end{frame}
-
-\begin{frame}{Algorithm: Bounded Convex Simplex Optimization}
-  \begin{block}{Mathematical Formulation (Solved on Validation Fold via L-BFGS-B)}
-    \[
-      \min_{\mathbf{w}} \;\bigl\lVert \mathbf{y}_{\text{val}} - \sum_{i=1}^{3} w_i\,\hat{\mathbf{y}}_i \bigr\rVert_2^2
-      \quad \text{subject to}\quad w_i \ge 0 \quad \text{and} \quad \sum_{i=1}^{3} w_i = 1
-    \]
-  \end{block}
-  \vspace{2pt}
-  \centering
-  \small
-  \begin{tabular}{lrr}
-    \toprule
-    \textbf{Base Specialist Stream} & \textbf{Learned Optimal Weight ($w_i$)} & \textbf{Standalone Test MAE} \\ \midrule
-    \textbf{Stream 1: LightGBM (Tabular GBDT)} & \textbf{49.83\%} & 25.02 kWh \\
-    \textbf{Stream 2: MSD-TCN (Wave Specialist)} & \textbf{32.60\%} & 28.55 kWh \\
-    \textbf{Stream 3: D-PABNet (Patch Specialist)} & \textbf{17.57\%} & 30.88 kWh \\ \bottomrule
-  \end{tabular}
+\section{Dataset}
+\begin{frame}{Dataset -- London Smart Meters (UK Power Networks)}
+  \begin{itemize}
+    \item 30-minute energy readings (kWh/hh) from \textbf{5,567 households}, stored in block files and aggregated to one grid-level series.
+    \item \textbf{Weather (Dark Sky, hourly):} temperature, apparent temperature, humidity, pressure.
+    \item \textbf{UK bank holidays} encoded as a binary holiday flag.
+    \item Other available tables (daily statistics, half-hour matrix, ACORN demographics) are \emph{not} used.
+  \end{itemize}
   \vspace{4pt}
+  \begin{alertblock}{Scope}
+    Experiments use the London dataset only (Nov 2011 -- Feb 2014). AMPds is not part of the current experiments.
+  \end{alertblock}
+\end{frame}
 
-  \footnotesize\textbf{Key Defense Property:} Because the objective is quadratic and convex over a 3-dimensional simplex, the global minimum is found deterministically in \textbf{0.28 seconds} with zero gradient vanishing risk.
+\section{Experiment Setup}
+\begin{frame}{Experiment Setup -- Protocol}
+  \small
+  \begin{tabular}{p{2.6cm}p{5.2cm}r}
+    \toprule
+    \textbf{Split} & \textbf{Period} & \textbf{Steps} \\ \midrule
+    Train & 23 Nov 2011 -- 30 Jun 2013 & 27,573 \\
+    Validation & 1 Jul 2013 -- 28 Oct 2013 & 5,909 \\
+    Test & 29 Oct 2013 -- 28 Feb 2014 (winter) & 5,861 \\ \bottomrule
+  \end{tabular}
+  \vspace{6pt}
+  \begin{itemize}
+    \item Strict chronological split with no leakage: scaling and fitting use train only; validation is used for early stopping and ensemble weights.
+    \item Task: forecast horizon $H=1$ (30 minutes ahead) with lookback $L=48$ half-hours (24 h).
+    \item Every model is trained and tested on the same splits; training time (seconds) is recorded per model.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Experiment Setup -- Models Compared}
+  \small
+  \begin{tabular}{p{4.0cm}p{8.6cm}}
+    \toprule
+    \textbf{Group} & \textbf{Models} \\ \midrule
+    Proposed & STLF-SuperEnsemble (GBDT + TCN + PatchBiLSTM, convex blend) \\
+    Tabular baseline & LightGBM \\
+    Additional hybrid variants & MSD-TCN, D-PABNet, H-MoE-Boost, MS-STLFNet (+ ablation without residual tree) \\
+    Published deep models & TCN-QRNN (Sci. Rep. 2025), TimeMixer (ICLR 2024), DLinear (AAAI 2023), LTE Hybrid (IEEE TSG 2025), iTransformer (ICLR 2024), EMSformer (IEEE TPWRS 2025), PatchTST (ICLR 2023) \\ \bottomrule
+  \end{tabular}
+\end{frame}
+
+\begin{frame}{Experiment Setup -- Metrics and Stress Regimes}
+  \small
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+    \textbf{Accuracy metrics}
+    \begin{itemize}
+      \item MAE, RMSE (kWh)
+      \item WAPE, MAPE (\%)
+      \item R\textsuperscript{2} score
+      \item Training time (s)
+    \end{itemize}
+    \textbf{Significance}
+    \begin{itemize}
+      \item Diebold--Mariano test, pairwise win rate
+    \end{itemize}
+    \column{0.48\textwidth}
+    \textbf{Operational regimes (MAE)}
+    \begin{itemize}
+      \item Peak hours: 17:00--21:00
+      \item Overnight base load: 02:00--06:00
+      \item Cold snap: temperature below the 20th percentile
+      \item Weekends
+      \item Maximum single-step outlier error
+    \end{itemize}
+  \end{columns}
 \end{frame}
 
 % ============================================================
-% SECTION 4: EMPIRICAL RESULTS & BENCHMARKS
+% SLIDES 20, 21, 22, 23: Performance Evaluation
 % ============================================================
-\section{Empirical Results & Benchmark Leaderboard}
-
-\begin{frame}{Primary Benchmark Leaderboard (Test Set: 5,861 Windows)}
+\section{Performance Evaluation}
+\begin{frame}{Performance -- Primary Benchmark (test set, sorted by MAE)}
   \centering
   \tiny
-  \setlength{\tabcolsep}{3.5pt}
+  \setlength{\tabcolsep}{4pt}
   \begin{tabular}{clrrrrrr}
     \toprule
-    \textbf{Rank} & \textbf{Model Architecture} & \textbf{MAE (kWh)} & \textbf{RMSE} & \textbf{WAPE\%} & \textbf{MAPE\%} & \textbf{R\textsuperscript{2}} & \textbf{Opt/Train Time} \\ \midrule
+    \textbf{\#} & \textbf{Model} & \textbf{MAE} & \textbf{RMSE} & \textbf{WAPE\%} & \textbf{MAPE\%} & \textbf{R\textsuperscript{2}} & \textbf{Time (s)} \\ \midrule
     \rowcolor{championhighlight}
-    \textbf{1} & \textbf{STLF-SuperEnsemble (Ours)} & \textbf{21.64} & \textbf{28.46} & \textbf{1.80\%} & \textbf{1.83\%} & \textbf{0.9950} & \textbf{0.28 s} \\
-    2 & LightGBM (GBDT Baseline) & 25.02 & 32.46 & 2.08\% & 2.15\% & 0.9934 & 1.6 s \\
-    3 & MSD-TCN (Novel 1) & 28.55 & 37.00 & 2.37\% & 2.47\% & 0.9915 & 434.4 s \\
-    4 & D-PABNet (Novel 2) & 30.88 & 39.59 & 2.56\% & 2.63\% & 0.9902 & 188.6 s \\
-    5 & H-MoE-Boost (Novel 3) & 30.90 & 41.46 & 2.56\% & 2.57\% & 0.9893 & 198.5 s \\
-    6 & TCN-QRNN (Nature Sci. Rep. 2025) & 35.38 & 47.71 & 2.94\% & 2.90\% & 0.9858 & 447.3 s \\
-    7 & TimeMixer (ICLR 2024) & 42.38 & 55.66 & 3.52\% & 3.82\% & 0.9807 & 28.5 s \\
-    8 & DLinear (AAAI 2023) & 43.42 & 54.20 & 3.60\% & 3.95\% & 0.9817 & 13.6 s \\
-    9 & MS-STLFNet (Ablation Prototype) & 43.88 & 57.86 & 3.64\% & 3.62\% & 0.9792 & 441.5 s \\
-    10 & MS-STLFNet (No Residual Tree) & 44.91 & 59.20 & 3.73\% & 3.66\% & 0.9782 & 441.5 s \\
-    11 & LTE Hybrid (IEEE TSG 2025) & 58.02 & 75.62 & 4.82\% & 4.57\% & 0.9644 & 5672.2 s \\
-    12 & iTransformer (ICLR 2024) & 71.91 & 86.46 & 5.97\% & 6.23\% & 0.9535 & 217.4 s \\
-    13 & EMSformer (IEEE TPWRS 2025) & 84.49 & 103.64 & 7.01\% & 6.82\% & 0.9331 & 836.0 s \\
-    14 & PatchTST (ICLR 2023) & 200.72 & 237.10 & 16.66\% & 16.63\% & 0.6500 & 719.8 s \\ \bottomrule
+    1 & \textbf{STLF-SuperEnsemble (proposed)} & \textbf{21.64} & \textbf{28.46} & \textbf{1.80} & \textbf{1.83} & \textbf{0.9950} & 0.28 \\
+    2 & LightGBM & 25.02 & 32.46 & 2.08 & 2.15 & 0.9934 & 1.6 \\
+    3 & MSD-TCN & 28.55 & 37.00 & 2.37 & 2.47 & 0.9915 & 434.4 \\
+    4 & D-PABNet & 30.88 & 39.59 & 2.56 & 2.63 & 0.9902 & 188.6 \\
+    5 & H-MoE-Boost & 30.90 & 41.46 & 2.56 & 2.57 & 0.9893 & 198.5 \\
+    6 & TCN-QRNN (Sci. Rep. 2025) & 35.38 & 47.71 & 2.94 & 2.90 & 0.9858 & 447.3 \\
+    7 & TimeMixer (ICLR 2024) & 42.38 & 55.66 & 3.52 & 3.82 & 0.9807 & 28.5 \\
+    8 & DLinear (AAAI 2023) & 43.42 & 54.20 & 3.60 & 3.95 & 0.9817 & 13.6 \\
+    9 & MS-STLFNet & 43.88 & 57.86 & 3.64 & 3.62 & 0.9792 & 441.5 \\
+    10 & MS-STLFNet, no residual tree & 44.91 & 59.20 & 3.73 & 3.66 & 0.9782 & 441.5 \\
+    11 & LTE Hybrid (IEEE TSG 2025) & 58.02 & 75.62 & 4.82 & 4.57 & 0.9644 & 5672.2 \\
+    12 & iTransformer (ICLR 2024) & 71.91 & 86.46 & 5.97 & 6.23 & 0.9535 & 217.4 \\
+    13 & EMSformer (IEEE TPWRS 2025) & 84.49 & 103.64 & 7.01 & 6.82 & 0.9331 & 836.0 \\
+    14 & PatchTST (ICLR 2023) & 200.72 & 237.10 & 16.66 & 16.63 & 0.6500 & 719.8 \\ \bottomrule
   \end{tabular}
-  \vspace{4pt}
-
-  \footnotesize\textbf{Key Takeaway:} STLF-SuperEnsemble cuts MAE by \textbf{13.52\%} over LightGBM, \textbf{38.8\%} over TCN-QRNN, and \textbf{74.4\%} over EMSformer.
 \end{frame}
 
-\begin{frame}{Performance: Winter Peak Week Load Tracking}
-  \figframe{Figure_1_load_tracking_peak_week.png}{0.72}{Continuous tracking (Dec 23--29, 2013). The Champion (red) matches actual peaks ($>$2000 kWh) without lag, while EMSformer overshoots by 150--250 kWh.}
+\begin{frame}{Performance -- Load Tracking in the Winter Peak Week}
+  \centering
+  \includegraphics[width=0.95\textwidth,height=0.72\textheight,keepaspectratio]{Figure_1_load_tracking_peak_week.png}\\[2pt]
+  {\footnotesize 23--29 Dec 2013: SuperEnsemble (red) tracks ground truth (black) without peak clipping; EMSformer overshoots by 150--250 kWh.}
 \end{frame}
 
-\begin{frame}{Performance: 4-Regime Operational Stress Test}
-  \figframe{Figure_2_regime_stress_comparison.png}{0.72}{Under Peak Hours (17:00--21:00) and Cold Snaps ($<$20th percentile temp), deep transformers degrade sharply (EMSformer $\approx$ 160 kWh), while our ensemble remains stable.}
+\begin{frame}{Performance -- Operational Regime Stress Test (MAE, kWh)}
+  \centering
+  \tiny
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{lrrrrrr}
+    \toprule
+    \textbf{Model} & \textbf{Overall} & \textbf{Peak} & \textbf{Overnight} & \textbf{Cold snap} & \textbf{Weekend} & \textbf{Max error} \\ \midrule
+    \textbf{STLF-SuperEnsemble} & \textbf{21.64} & \textbf{23.39} & \textbf{11.55} & \textbf{19.50} & \textbf{21.69} & \textbf{154.88} \\
+    LightGBM & 25.02 & 27.93 & 14.53 & 24.13 & 24.01 & 171.81 \\
+    MSD-TCN & 28.55 & 32.30 & 19.32 & 23.60 & 27.93 & 183.38 \\
+    D-PABNet & 30.88 & 36.32 & 15.41 & 26.26 & 27.59 & 159.94 \\
+    H-MoE-Boost & 30.90 & 44.08 & 14.47 & 27.75 & 27.53 & 205.66 \\
+    TCN-QRNN & 35.38 & 53.45 & 16.13 & 31.37 & 35.11 & 217.26 \\
+    TimeMixer & 42.38 & 40.93 & 29.91 & 40.80 & 48.40 & 268.71 \\
+    DLinear & 43.42 & 37.81 & 38.34 & 51.65 & 42.85 & 251.63 \\
+    LTE Hybrid & 58.02 & 104.00 & 22.76 & 52.19 & 52.18 & 321.95 \\
+    iTransformer & 71.91 & 101.57 & 54.70 & 76.06 & 69.58 & 300.69 \\
+    EMSformer & 84.49 & 159.94 & 40.64 & 76.70 & 86.71 & 383.33 \\
+    PatchTST & 200.72 & 335.25 & 109.19 & 138.84 & 190.79 & 679.13 \\ \bottomrule
+  \end{tabular}
 \end{frame}
 
-\begin{frame}{Performance: Pareto Accuracy vs. Latency Frontier}
-  \figframe{Figure_3_pareto_accuracy_vs_efficiency.png}{0.72}{Our ensemble achieves the lowest error (21.64 kWh) with sub-second optimization (0.28 s), whereas transformers consume 200--850 s for inferior accuracy.}
-\end{frame}
-
-\begin{frame}{Performance: Error Residual Distributions}
-  \figframe{Figure_4_error_residuals_distribution.png}{0.72}{The Champion exhibits the narrowest interquartile range (median MAE 16.8 kWh vs. LightGBM 20.0 kWh and EMSformer 70.6 kWh) and minimal outlier tails.}
-\end{frame}
-
-\begin{frame}{Mechanism: Why Does the Ensemble Win?}
-  \figframe{Figure_5_ensemble_weights_and_correlation.png}{0.65}{(a) Optimal blend: 49.8\% LightGBM, 32.6\% MSD-TCN, 17.6\% D-PABNet. (b) Residual correlation is only 0.40--0.59, proving error orthogonality.}
-\end{frame}
-
-\begin{frame}{Statistical Significance: Diebold-Mariano Tests}
+\begin{frame}{Performance -- Statistical Significance (Diebold--Mariano)}
   \centering
   \scriptsize
   \begin{tabular}{lrrrrr}
     \toprule
-    \textbf{Proposed vs. Baseline} & \textbf{Baseline MAE} & \textbf{MAE Reduction} & \textbf{Win Rate} & \textbf{DM Statistic} & \textbf{$p$-value} \\ \midrule
-    \textbf{vs. LightGBM (GBDT)} & 25.02 & \textbf{13.52\%} & \textbf{59.8\%} & \textbf{+11.53} & \textbf{$< 0.0001$} \\
-    vs. MSD-TCN (Novel 1) & 28.55 & 24.2\% & 63.2\% & +15.42 & $< 0.0001$ \\
-    vs. D-PABNet (Novel 2) & 30.88 & 29.9\% & 66.1\% & +17.69 & $< 0.0001$ \\
-    vs. H-MoE-Boost (Novel 3) & 30.90 & 30.0\% & 62.1\% & +14.94 & $< 0.0001$ \\
-    vs. TCN-QRNN (2025) & 35.38 & 38.8\% & 67.0\% & +15.59 & $< 0.0001$ \\
-    vs. TimeMixer (ICLR 2024) & 42.38 & 48.9\% & 72.5\% & +17.77 & $< 0.0001$ \\
-    vs. DLinear (AAAI 2023) & 43.42 & 50.2\% & 76.2\% & +19.69 & $< 0.0001$ \\
-    vs. LTE Hybrid (IEEE TSG 2025) & 58.02 & 62.7\% & 78.6\% & +17.12 & $< 0.0001$ \\
-    vs. iTransformer (ICLR 2024) & 71.91 & 69.9\% & 84.6\% & +25.04 & $< 0.0001$ \\
-    vs. EMSformer (IEEE TPWRS 2025) & 84.49 & 74.4\% & 88.1\% & +20.16 & $< 0.0001$ \\
-    vs. PatchTST (ICLR 2023) & 200.72 & 89.2\% & 96.2\% & +25.07 & $< 0.0001$ \\ \bottomrule
+    \textbf{Proposed vs.} & \textbf{Baseline MAE} & \textbf{MAE reduction} & \textbf{Win rate} & \textbf{DM stat.} & \textbf{$p$-value} \\ \midrule
+    LightGBM & 25.02 & 13.5\% & 59.8\% & 11.53 & $<0.0001$ \\
+    TCN-QRNN & 35.38 & 38.8\% & 67.0\% & 15.59 & $<0.0001$ \\
+    TimeMixer & 42.38 & 48.9\% & 72.5\% & 17.77 & $<0.0001$ \\
+    DLinear & 43.42 & 50.2\% & 76.2\% & 19.69 & $<0.0001$ \\
+    LTE Hybrid & 58.02 & 62.7\% & 78.6\% & 17.12 & $<0.0001$ \\
+    iTransformer & 71.91 & 69.9\% & 84.6\% & 25.04 & $<0.0001$ \\
+    EMSformer & 84.49 & 74.4\% & 88.1\% & 20.16 & $<0.0001$ \\
+    PatchTST & 200.72 & 89.2\% & 96.2\% & 25.07 & $<0.0001$ \\ \bottomrule
   \end{tabular}
   \vspace{4pt}
 
-  \footnotesize\textbf{Statistical Defense:} Loss differential is defined as $d_t = |e_{\text{baseline}}| - |e_{\text{proposed}}|$. A positive DM statistic confirms baseline error strictly exceeds proposed error, rejecting the null hypothesis with $>99.99\%$ confidence.
+  {\footnotesize Win rate = share of test windows where proposed model has lower error. Loss differential $d_t = |e_{\text{baseline}}| - |e_{\text{proposed}}|$; positive DM stat confirms baseline error is strictly higher ($p<0.0001$).}
 \end{frame}
 
 % ============================================================
-% SECTION 5: PRACTICAL DEPLOYMENT & CONCLUSION
+% SLIDES 24, 25, 26: Observations
 % ============================================================
-\section{Deployment, Limitations & Conclusion}
+\section{Observations}
+\begin{frame}{Observations -- Accuracy}
+  \small
+  \begin{itemize}
+    \item The SuperEnsemble is best on every metric: MAE 21.64 kWh, RMSE 28.46 kWh, WAPE 1.80\%, MAPE 1.83\%, R\textsuperscript{2} 0.9950, and a \textbf{13.5\% lower MAE than LightGBM}.
+    \item \textbf{LightGBM is a very strong baseline:} with engineered lag, calendar and weather features it beats every standalone deep model, including all published ones and the additional hybrid variants.
+    \item No standalone deep or hybrid model surpassed LightGBM. The gain comes from blending complementary learners (trees + deep temporal models).
+    \item The best standalone hybrid variant, MSD-TCN (MAE 28.55), improves on the best published baseline, TCN-QRNN (35.38), by about 19\%.
+    \item In the ablation, the residual tree stage lowers MS-STLFNet MAE from 44.91 to 43.88.
+    \item Transformer-family baselines (iTransformer, EMSformer, PatchTST) perform worst; PatchTST reaches only R\textsuperscript{2} = 0.65. A possible reason is that they are designed for long-horizon forecasting, but this was not tested here.
+  \end{itemize}
+\end{frame}
 
-\begin{frame}{Practical Deployment \& Operational Latency}
+\begin{frame}{Observations -- Robustness and Significance}
+  \small
+  \begin{itemize}
+    \item The proposed model has the lowest error in every regime: peak hours 23.39 (LightGBM 27.93), overnight 11.55 (14.53), cold snaps 19.50 (24.13) and weekends 21.69 (24.01).
+    \item Peak hours are where weaker models fail most: EMSformer 159.94, PatchTST 335.25, LTE Hybrid 104.00 and iTransformer 101.57 kWh MAE.
+    \item In the peak week, EMSformer overshoots the evening peaks by roughly 150--250 kWh, while the SuperEnsemble follows peaks and valleys without visible lag. Its largest visible miss is the Christmas Day midday plateau, which is an atypical holiday profile.
+    \item All eight Diebold--Mariano tests are significant ($p<0.0001$). The win rate against LightGBM is 59.8\%, so that gain is consistent but modest, unlike the large gaps against the deep baselines.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Observations -- Accuracy vs Efficiency}
+  \small
+  \begin{itemize}
+    \item The ensemble's 0.28 s covers only the convex weight optimisation. It does not include training the base learners.
+    \item LightGBM reaches the second-best accuracy in 1.6 s, the best accuracy-to-cost ratio among single models.
+    \item Several deep models need minutes of training (about 190--450 s) and still trail LightGBM. LTE Hybrid takes 5,672 s with MAE 58.02.
+    \item Practical takeaway: a tree-based core plus a small deep component gives the best accuracy at a moderate total cost.
+  \end{itemize}
+\end{frame}
+
+% ============================================================
+% SLIDE 27: Limitations and Future Work
+% ============================================================
+\section{Limitations and Future Work}
+\begin{frame}{Limitations and Future Work}
   \begin{columns}[T]
     \column{0.48\textwidth}
-      \begin{block}{Offline Optimization vs. Real-Time Inference}
-        \footnotesize
-        \begin{itemize}
-          \item \textbf{Convex Solver (0.28 s):} Weights are learned once on the validation fold and remain fixed during online testing.
-          \item \textbf{Online Inference ($<$ 50 ms):} During live half-hourly dispatch, evaluating the 3 models and computing the weighted sum takes less than 50 milliseconds.
-        \end{itemize}
-      \end{block}
+    \textbf{Limitations}
+    \begin{itemize}
+      \item Single dataset (London) at aggregated level only
+      \item Only $H=1$ (30 min ahead) evaluated
+      \item Test period covers winter only
+      \item Bank holidays are hard-coded for 2011--2014
+      \item Point forecasts only, no uncertainty
+    \end{itemize}
     \column{0.48\textwidth}
-      \begin{block}{Grid Integration Architecture}
-        \footnotesize
-        \begin{itemize}
-          \item Packaged as a lightweight containerized microservice.
-          \item Runs automated half-hour rolling forecasts triggered by live smart meter ingestion.
-          \item Requires quarterly GBDT retraining to capture seasonal tariff adjustments.
-        \end{itemize}
-      \end{block}
+    \textbf{Future work}
+    \begin{itemize}
+      \item Multi-step horizons (e.g.\ 6 h, 24 h)
+      \item Cross-dataset validation (e.g.\ AMPds, other regions)
+      \item Probabilistic (quantile) forecasting
+      \item Test across all seasons
+      \item Real-time deployment on streaming data
+    \end{itemize}
   \end{columns}
 \end{frame}
 
-\begin{frame}{Limitations \& Future Work}
-  \begin{columns}[T]
-    \column{0.48\textwidth}
-      \begin{alertblock}{Current Limitations}
-        \footnotesize
-        \begin{itemize}
-          \item \textbf{Dataset Scope:} Benchmarked strictly on the London smart grid; requires validation on rural and industrial microgrids.
-          \item \textbf{Point Forecasts Only:} Current setup outputs single-point deterministic estimates without probabilistic prediction intervals.
-          \item \textbf{Single-Step Horizon:} Evaluated at $H=1$ (30 min ahead); multi-step dispatch (6h, 24h) needs recursive or direct multi-head extensions.
-        \end{itemize}
-      \end{alertblock}
-    \column{0.48\textwidth}
-      \begin{exampleblock}{Future Research Directions}
-        \footnotesize
-        \begin{itemize}
-          \item \textbf{Probabilistic Quantile Fusion:} Extend convex formulation to pinball loss for $P_{10}$--$P_{90}$ reserve bands.
-          \item \textbf{Electric Vehicle (EV) Telemetry:} Integrate sub-metered heat pump and EV charging point datasets.
-          \item \textbf{Distributed Edge Execution:} Quantize deep specialists for local substation hardware deployment.
-        \end{itemize}
-      \end{exampleblock}
-  \end{columns}
+% ============================================================
+% SLIDE 28: Conclusion
+% ============================================================
+\section{Conclusion}
+\begin{frame}{Conclusion}
+  \begin{itemize}
+    \item We built a leakage-free pipeline that aggregates 5,567 smart meters into a grid-level half-hourly forecasting benchmark with weather and calendar features.
+    \item The proposed convex STLF-SuperEnsemble (GBDT + TCN + PatchBiLSTM) achieves MAE 21.64 kWh and R\textsuperscript{2} 0.9950, beating LightGBM by 13.5\% and seven published models by 39--89\% (MAE), with significance at $p<0.0001$ (Diebold--Mariano).
+    \item It is also the most robust model at peak hours, overnight, during cold snaps and at weekends.
+    \item Strong tabular baselines remain hard to beat for half-hour-ahead load forecasting; hybrid blending of complementary learners is the most effective way we found to improve on them.
+  \end{itemize}
 \end{frame}
 
-\begin{frame}{Conclusions \& Core Engineering Contributions}
+% ============================================================
+% SLIDES 29 & 30: References
+% ============================================================
+\section{References}
+\begin{frame}[allowframebreaks]{References}
+  \footnotesize
   \begin{enumerate}
-    \item \textbf{Resolved Inductive Bias Mismatch:} Proved empirically why pure trees fail on continuous ramps and pure transformers over-smooth sharp peaks.
-    \item \textbf{Constructed a Standardized Benchmark:} Evaluated 14 models under an identical, leak-free chronological setup on 5,567 smart meters.
-    \item \textbf{Engineered Two Novel Neural Specialists:} Designed MSD-TCN for rapid multi-scale ramping and D-PABNet for bidirectional temporal smoothing.
-    \item \textbf{Established New State-of-the-Art:} Achieved \textbf{21.64 kWh MAE} (13.52\% improvement over LightGBM baseline, $R^2 = 0.9950$) with \textbf{0.28s} convex convergence and statistical significance ($p < 0.0001$).
-  \end{enumerate}
-\end{frame}
-
-\begin{frame}{References}
-  \tiny
-  \begin{enumerate}
+    \item K. Ullah et al., ``Short-Term Load Forecasting: A Comprehensive Review and Simulation Study With CNN-LSTM Hybrids Approach,'' \emph{IEEE Access}, vol. 12, pp. 111858--111881, 2024.
+    \item M. K. M. Shapi, N. A. Ramli, and L. J. Awalin, ``Energy Consumption Prediction by Using Machine Learning for Smart Building: Case Study in Malaysia,'' \emph{Developments in the Built Environment}, vol. 5, Art. no. 100037, Mar. 2021.
+    \item R. Chinnaraji and P. Ragupathy, ``Accurate Electricity Consumption Prediction Using Enhanced Long Short-Term Memory,'' \emph{IET Communications}, vol. 16, no. 8, pp. 830--844, 2022.
+    \item X. Yang, Y. Zhang, H. Wang, and L. Chen, ``Building Electrical Consumption Patterns Forecasting Based on a Novel Hybrid Deep Learning Model,'' \emph{Energy and Buildings}, vol. 279, Art. no. 112650, 2023.
+    \item M.-P. Wu and F. Wu, ``Predicting Residential Electricity Consumption Using CNN-BiLSTM-SA Neural Networks,'' \emph{IEEE Access}, vol. 12, pp. 71555--71565, 2024.
+    \item J. Ottens, T. Akilan, A. Ameli, and M. N. Uddin, ``Cascaded Ensemble-Based Short-Term Load Forecasting for Smart Energy Management,'' in \emph{Proc. IEEE EPEC}, 2023.
+    \item Z. Zhang and W.-C. Hong, ``Long Short-Term Memory-Based Twin Support Vector Regression for Probabilistic Load Forecasting,'' \emph{IEEE Trans. Neural Networks and Learning Systems}, vol. 36, no. 1, pp. 1763--1776, Jan. 2025.
+    \item G. Pentsos et al., ``A Hybrid LSTM-Transformer Model for Power Load Forecasting,'' \emph{IEEE Access}, vol. 13, pp. 2625--2642, 2025.
+    \item Q. Fang et al., ``A Novel Multi-Step Short-Term Power Forecasting Model for Electric Power Systems Based on Deep-Learning,'' \emph{IEEE Trans. Power Systems}, vol. 40, no. 6, pp. 4621--4638, Nov. 2025.
+    \item H. Li et al., ``SFDRLF: Spatiotemporal Feature Decoupling and Dynamic Fusion Model for Power Regional Load Forecasting,'' \emph{IEEE Access}, vol. 14, pp. 97999--98014, 2026.
     \item Y. Nie et al., ``A Time Series is Worth 64 Words: Long-term Forecasting with Transformers (PatchTST),'' in \emph{Proc. ICLR}, 2023.
     \item A. Zeng et al., ``Are Transformers Effective for Time Series Forecasting? (DLinear),'' in \emph{Proc. AAAI}, 2023.
     \item S. Wang et al., ``TimeMixer: Decomposable Multiscale Mixing for Time Series Forecasting,'' in \emph{Proc. ICLR}, 2024.
     \item Y. Liu et al., ``iTransformer: Inverted Transformers Are Effective for Time Series Forecasting,'' in \emph{Proc. ICLR}, 2024.
     \item G. Ke et al., ``LightGBM: A Highly Efficient Gradient Boosting Decision Tree,'' in \emph{Proc. NeurIPS}, 2017.
+    \item F. X. Diebold and R. S. Mariano, ``Comparing Predictive Accuracy,'' \emph{J. Business \& Economic Statistics}, vol. 13, no. 3, pp. 253--263, 1995.
     \item J. Zhang et al., ``TCN-QRNN: A Hybrid Causal Convolutional Network for Short-Term Load Forecasting,'' \emph{Nature Scientific Reports}, vol. 15, Art. no. 4812, 2025.
     \item M. Liu et al., ``Long-Term and Short-Term Hybrid Energy Forecasting for Distribution Grids (LTE-Hybrid),'' \emph{IEEE Trans. Smart Grid}, vol. 16, no. 1, pp. 412--425, Jan. 2025.
     \item H. Wang et al., ``EMSformer: An Energy Management Spatial-Temporal Transformer for Grid Load Prediction,'' \emph{IEEE Trans. Power Systems}, vol. 40, no. 2, pp. 1120--1134, Mar. 2025.
-    \item F. X. Diebold and R. S. Mariano, ``Comparing Predictive Accuracy,'' \emph{J. Business \& Economic Statistics}, vol. 13, no. 3, pp. 253--263, 1995.
-    \item UK Power Networks, ``SmartMeter Energy Consumption Data in London Households,'' \emph{London Datastore}, Open Data, 2014.
   \end{enumerate}
 \end{frame}
 
-% ------------------------------------------------------------
-% SLIDE 25: Closing / Thank You
-% ------------------------------------------------------------
+% ============================================================
+% SLIDE 31: Closing / Thank You
+% ============================================================
 \begin{frame}
   \centering
   \vspace{15pt}
-  \begin{beamercolorbox}[sep=12pt,center,rounded=true,shadow=true]{palette primary}
+  \begin{beamercolorbox}[sep=10pt,center,rounded=true,shadow=true]{palette primary}
     \Huge \textbf{THANK YOU}
   \end{beamercolorbox}
-  \vspace{15pt}
+  \vspace{12pt}
   {\large \textbf{LOAD FORECASTING}}\\[4pt]
-  {\small A Convex Hybrid Ensemble Benchmarked on the London Smart Meter Grid}\\[10pt]
+  {\small A Convex Hybrid Ensemble Benchmarked on the London Smart Meter Grid}\\[8pt]
   \textbf{Group 18} --- Department of Computer Science and Engineering\\
-  TKM College of Engineering, Kollam\\[6pt]
-  \textbf{Project Supervisor:} Dr. Anantha Padmanabhan N. K.\\[12pt]
+  TKM College of Engineering, Kollam\\[4pt]
+  \textbf{Project Supervisor:} Dr. Anantha Padmanabhan N. K.\\[10pt]
   \textit{Questions and Technical Discussion Welcome}
 \end{frame}
 
